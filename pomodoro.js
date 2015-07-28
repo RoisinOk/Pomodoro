@@ -2,9 +2,7 @@
  * Created by roisinokeeffe on 27/07/2015.
  */
 
-//The set interval method of the window object is a loop. It carries out a function every specified number of
-//milliseconds. It takes two parameters, the first is a function, the second is a number of milliseconds.
-//1 second = 1000 milliseconds
+
 
 var timerVar;    //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
@@ -13,10 +11,19 @@ var minsElapsed;                        //Declare variable for elapsed mins
 
 var secsLeft = 120;                      //sets seconds to 60. Counts down from this number.
 var minsLeft = secsLeft/60;             //Amount of minutes in secsLeft
+var playing = false;
+
+var playImg = document.getElementById("play");
+var pauseImg = document.getElementById("pause");
+
+//The set interval method of the window object is a loop. It carries out a function every specified number of
+//milliseconds. It takes two parameters, the first is a function, the second is a number of milliseconds.
+//1 second = 1000 milliseconds
 
 function startTimer(){
-    timerVar = window.setInterval(function(){ myTimer() }, 100);
-    start = new Date().getTime();       //Return the number of milliseconds since midnight 1970/01/01
+    start = new Date().getTime();                                   //Return the number of milliseconds since midnight 1970/01/01
+    timerVar = window.setInterval(function(){ myTimer() }, 100);    //Runs timer
+    playing = true;
 }
 
 function myTimer(){
@@ -41,11 +48,24 @@ function pauseTimer(){
     secsLeft = secsLeft -(secsElapsed);
     minsLeft = minsLeft -(minsElapsed);
     clearInterval(timerVar);            //stops the timerVar setInterval method from running
+    playing = false;
 }
 
 //Function resumeTimer is the same as start timer, but secs and start variables are updated.
 function resumeTimer(){
     start = new Date().getTime();                                   //updates start variable to new current time millisecs
     timerVar = window.setInterval(function(){ myTimer() }, 100);    //runs timer var function again with new secs (from pause function)
+    playing = true;
 };
 
+function playPause(){
+    if(playing){
+        pauseTimer();
+        playImg.className="show";
+        pauseImg.className="hide";
+    }else{
+        resumeTimer();
+        playImg.className="hide";
+        pauseImg.className="show";
+    }
+}

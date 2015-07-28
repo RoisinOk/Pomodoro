@@ -3,13 +3,15 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title>Pomodoro</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
     <h1><span id =minsDiv>02</span>:<span id =secsDiv>00</span></h1>
     <br>
-    <button onclick="startTimer();">Start Timer</button>
-    <button onclick="resumeTimer();">Resume Timer</button>
-    <button onclick="pauseTimer();">Pause Timer</button>
+    <div id="playPauseDiv" onclick="playPause();">
+        <img id ="play" class="show" src="Triangle 1.png">
+        <img id ="pause" class="hide" src="Pause.png">
+    </div>
 
 <script src="pomodoro.js"></script>
 </body>
