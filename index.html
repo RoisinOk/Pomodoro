@@ -8,10 +8,16 @@
 <body>
     <h1><span id =minsDiv>02</span>:<span id =secsDiv>00</span></h1>
     <br>
-    <div id="playPauseDiv" onclick="playPause();">
+    <div id="playPauseDiv" class="circle" onclick="playPause();">
         <img id ="play" class="show" src="Triangle 1.png">
         <img id ="pause" class="hide" src="Pause.png">
     </div>
+    <div class="circle" onclick="stopTimer()">
+      <img id ="stop" class="show" src="stop.png">
+    </div>
+    <br>
+    <p id="timeRecord"></p>
+
 
 <script src="pomodoro.js"></script>
 </body>

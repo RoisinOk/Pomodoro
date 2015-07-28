@@ -8,6 +8,7 @@ var timerVar;    //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
 var secsElapsed;                        //Declare variable for elapsed secs
 var minsElapsed;                        //Declare variable for elapsed mins
+var totalSecs = 0;
 
 var secsLeft = 120;                      //sets seconds to 60. Counts down from this number.
 var minsLeft = secsLeft/60;             //Amount of minutes in secsLeft
@@ -15,6 +16,7 @@ var playing = false;
 
 var playImg = document.getElementById("play");
 var pauseImg = document.getElementById("pause");
+
 
 //The set interval method of the window object is a loop. It carries out a function every specified number of
 //milliseconds. It takes two parameters, the first is a function, the second is a number of milliseconds.
@@ -48,6 +50,7 @@ function pauseTimer(){
     secsLeft = secsLeft -(secsElapsed);
     minsLeft = minsLeft -(minsElapsed);
     clearInterval(timerVar);            //stops the timerVar setInterval method from running
+    totalSecs = totalSecs + secsElapsed;
     playing = false;
 }
 
@@ -68,4 +71,16 @@ function playPause(){
         playImg.className="hide";
         pauseImg.className="show";
     }
+}
+
+function stopTimer(){
+    clearInterval(timerVar);
+    if(playing){
+        totalSecs = totalSecs + secsElapsed;
+        document.getElementById("timeRecord").innerHTML = "You studied for "+totalSecs+" seconds.";
+    } else {
+        document.getElementById("timeRecord").innerHTML = "You studied for "+totalSecs+" seconds.";
+    }
+    document.getElementById("playPauseDiv").className="hide";
+    totalSecs = 0;
 }
