@@ -1,46 +1,28 @@
-.circle {
-    border-radius: 5%;
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    background:#07afaf;
-}
 
-#play {
-    height: 30px;
-    width: 30px;
-    margin-left: auto;
-    margin-right: 15%;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#pause {
-    height: 30px;
-    width: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#stop {
-    height: 30px;
-    width: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
 
 .hide {
     display: none;
-    visibility: hidden;
 }
 
 .show {
     display: block;
+}
+
+.working{
+    color: crimson;
+    font-family: sans-serif;
+    font-size: 4em;
+}
+
+
+.break{
+    color: darkturquoise;
+    font-family: sans-serif;
+    font-size: 4em;
+}
+
+.none{
+    color: dimgray;
+    font-family: sans-serif;
+    font-size: 4em;
 }

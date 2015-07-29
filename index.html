@@ -6,16 +6,19 @@
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-    <h1><span id =minsDiv>02</span>:<span id =secsDiv>00</span></h1>
+    <h1 id="clock" class="none"><span id =minsDiv>00</span>:<span id =secsDiv>00</span></h1>
     <br>
-    <div id="playPauseDiv" class="circle" onclick="playPause();">
-        <img id ="play" class="show" src="Triangle 1.png">
-        <img id ="pause" class="hide" src="Pause.png">
-    </div>
-    <div class="circle" onclick="stopTimer()">
-      <img id ="stop" class="show" src="stop.png">
-    </div>
+    <!--<div id="playPauseDiv" class="circle" onclick="playPause();">-->
+        <!--<img id ="play" class="show" src="Triangle 1.png">-->
+        <!--<img id ="pause" class="hide" src="Pause.png">-->
+    <!--</div>-->
+    <!--<div  id="stopDiv" class="circle" onclick="stopTimer()">-->
+      <!--<img id ="stop" class="show" src="stop.png">-->
+    <!--</div>-->
     <br>
+    <button onclick="playPause()" id="playPause">  Start Work  </button>
+    <button onclick="stopTimer()" id="stop">  Stop Working  </button>
+    <button onclick="skipBreak()" class="hide" id="skipBreak">Skip Break</button>
     <p id="timeRecord"></p>
 
 
