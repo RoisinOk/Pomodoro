@@ -12,11 +12,11 @@ var minsElapsed;                        //Declare variable for elapsed mins
 var totalSecs = 0;                      //Declare variable to hold total amount of seconds. It is added to as seconds elapse, and
                                         //retained through pause and play. Only
 
-var workSecsLeft = 10;                     //sets seconds to 60. Counts down from this number.
+var workSecsLeft = 1500;                     //sets seconds to 60. Counts down from this number.
 var workMinsLeft = workSecsLeft/60;        //Amount of minutes in workSecsLeft
 var workPlaying = false;                   //Boolean. False = timer paused. True = timer running
 
-var breakSecsLeft = 5;
+var breakSecsLeft = 300;
 var breakMinsLeft = breakSecsLeft/60;
 
 //===============================================================================================================================
@@ -149,7 +149,6 @@ function endBreakSession(){
     document.getElementById("skipBreak").className="hide";
     document.getElementById("stop").className="show";
     document.getElementById("playPause").className="show";
-    alert(secsElapsed);
     workSecsLeft = 10;
     workMinsLeft = workSecsLeft/60;
     playWorkTimer();
@@ -161,7 +160,7 @@ function endBreakSession(){
 //===============================================================================================================================
 
 function skipBreak(){
-    workSecsLeft = 10;
+    workSecsLeft = 1500;
     workMinsLeft = workSecsLeft/60;
     secsElapsed = 0;
     document.getElementById("skipBreak").className="hide";
