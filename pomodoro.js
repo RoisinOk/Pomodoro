@@ -2,22 +2,32 @@
  * Created by roisinokeeffe on 27/07/2015.
  */
 
-var timerVar;                       //Needs global variable so clearInterval can reference it
+var timerVar;                           //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
 var secsElapsed;                        //Declare variable for elapsed secs
 var minsElapsed;                        //Declare variable for elapsed mins
 
-var totalSecs = 0;                      //Declare variable to hold total amount of seconds. It is added to as seconds elapse, and
-                                        //retained through pause and play. Only
+var totalSecs       = 0;                //Declare variable to hold total amount of seconds. It is added to as seconds elapse, and
+                                        //retained through pause and play.
 
-var workSecsLeft = 10;                     //sets seconds to 60. Counts down from this number.
-var workMinsLeft = workSecsLeft/60;        //Amount of minutes in workSecsLeft
-var workPlaying = false;                   //Boolean. False = timer paused. True = timer running
+var workSecsLeft    = 10;               //sets amount of seconds in work session. Counts down from this number.
+var workMinsLeft    = workSecsLeft/60;  //Amount of minutes in workSecsLeft
+var workPlaying     = false;            //Boolean. False = timer paused. True = timer running
 
-var breakSecsLeft = 5;
-var breakMinsLeft = breakSecsLeft/60;
+var breakSecsLeft   = 5;                //sets amount of seconds in break session. Counts down from this number.
+var breakMinsLeft   = breakSecsLeft/60; //Amount of minutes in breakSecsLeft
 
-var tone = document.getElementById("tone");
+
+//Variables for accessing HTML elements
+var tone                = document.getElementById("tone");
+var totalSecondRecord   = document.getElementById("totalSecondRecord");
+var secondsClock        = document.getElementById("secsDiv");
+var minutesClock        = document.getElementById("minsDiv");
+var wholeClock          = document.getElementById("clock");
+var playPauseButton     = document.getElementById("playPause");
+var stopButton          = document.getElementById("stop");
+var skipBreakButton     = document.getElementById("skipBreak");
+var sessRecord          = document.getElementById("timeRecord")
 
 //===============================================================================================================================
 //Function myTimer - Timer counts down minutes and seconds of session, and calls function to end session at end.
@@ -31,17 +41,15 @@ function myTimer(secsLeft, minsLeft, endSessionFunction){
     var secsDisplay = (secsLeft -(secsElapsed))%60;                 //Seconds left, minus seconds elapsed. Displays remainder after divided by 60.
     var minsDisplay = Math.floor( minsLeft -(minsElapsed));         //Displays starting amount of mins, minus mins elapsed.
 
-
-
-    if (secsDisplay<10){                                                    //Checks if secsDisplay is single digit
-        document.getElementById("secsDiv").innerHTML = "0"+secsDisplay;     //Adds zero before if single
+    if (secsDisplay<10){                                            //Checks if secsDisplay is single digit
+        secondsClock.innerHTML = "0"+secsDisplay;                   //Adds zero before if single
     }else{
-        document.getElementById("secsDiv").innerHTML = secsDisplay;         //Displays normally if not.
+        secondsClock.innerHTML = secsDisplay;                       //Displays normally if not.
     }
-    if (minsDisplay<10){                                                    //Checks if minsDisplay is single digit
-        document.getElementById("minsDiv").innerHTML = "0"+minsDisplay;     //Adds zero before it if single
+    if (minsDisplay<10){                                            //Checks if minsDisplay is single digit
+        minutesClock.innerHTML = "0"+minsDisplay;                   //Adds zero before it if single
     }else{
-        document.getElementById("minsDiv").innerHTML = minsDisplay;         //Displays normally if not.
+        minutesClock.innerHTML = minsDisplay;                       //Displays normally if not.
     }
 
     if(minsDisplay<=0 && secsDisplay<=0){                           //if minutes and seconds are at zero (if time is up)
@@ -49,19 +57,19 @@ function myTimer(secsLeft, minsLeft, endSessionFunction){
         secsDisplay==0;
         endSessionFunction();                                       //Calls endWorkSession function
     }
-}//end of function myTimer
+}//end of function myTimer()
 
 //===============================================================================================================================
 //Function playWorkTimer starts the myTimer. It's called when play or resume is pressed.
 //===============================================================================================================================
 
 function playWorkTimer(){
-    secsElapsed=0;
-    start = new Date().getTime();                                           //Return the number of milliseconds since midnight 1970/01/01
+    secsElapsed=0;                                          //Resets seconds elapsed variable to zero before it starts
+    start = new Date().getTime();                           //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(workSecsLeft, workMinsLeft, endWorkSession) }, 100);    //Runs timer
-    workPlaying = true;
-    document.getElementById("clock").className="working";//Sets workPlaying boolean to true
-}
+    workPlaying = true;                                     //Sets workPlaying boolean to true
+    wholeClock.className="working";                         //Gives clock class of working (Changes colour to red)
+}//end of function playWorkTimer()
 
 
 //===============================================================================================================================
@@ -73,8 +81,8 @@ function pauseTimer(){
     clearInterval(timerVar);                            //stops the timer from running
     totalSecs = totalSecs + secsElapsed;                //Updates the total seconds count global variable to add on seconds just elapsed
     workPlaying = false;                                //Changes workPlaying boolean to false
-    document.getElementById("clock").className="none";
-}
+    wholeClock.className="none";                        //Gives clock class of none (Changes colour to grey)
+}//end of function pauseTimer()
 
 //===============================================================================================================================
 //Function playPause() checks whether play or pause was pressed on toggle button, and runs appropriate function
@@ -83,100 +91,95 @@ function pauseTimer(){
 function playPause(){                                       //Runs when play/pause button is pressed
     if(workPlaying){                                        //If already Playing
         pauseTimer();                                       //Pause timer
-        document.getElementById("playPause").innerHTML="  Play  ";   //Show the play button, and hide pause
-
+        playPauseButton.innerHTML="  Play  ";               //Make play/pause button show play
     }else{                                                  //If not workPlaying
         playWorkTimer();                                    //Play the work timer
-        document.getElementById("playPause").innerHTML="  Pause ";
+        playPauseButton.innerHTML="  Pause ";               //Make play/pause button show pause
     }
-}
+}//end of function playPause()
 
 //===============================================================================================================================
 //Function stopTimer() called when stop button is pressed
 //===============================================================================================================================
 
-function stopTimer(){                                                                                   //Stops timer running
-    clearInterval(timerVar);
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if(workPlaying){                                //if the timer had been workPlaying when button pressed,
-        totalSecs = totalSecs + secsElapsed;    //the last seconds elapsed need to be added onto total seconds
-        //alert("You studied for "+totalSecs+" seconds.");
-        document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
-        //Add code to push totalSecs to database here
-    } else {                                    //if the player had been paused, the seconds would have already been added on.
-        //alert("You studied for "+totalSecs+" seconds.");
-        document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
-        //Add code to push totalSecs to database here
+function stopTimer(){
+    clearInterval(timerVar);                //Stops timer running
+
+    if(workPlaying){                                    //if the timer had been workPlaying when button pressed,
+        totalSecs = totalSecs + secsElapsed;            //the last seconds elapsed need to be added onto total seconds
+        sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";
+        displayTotalSeconds();
+    } else {                                            //if the player had been paused, the seconds would have already been added on.
+        sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";
+        displayTotalSeconds();
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    document.getElementById("playPause").className="hide";       //Hides play/pause button
-    document.getElementById("stop").className="hide";            //Hides stop button
-    totalSecs = 0;                                                  //Resets totalSecs variable
-}
+
+    playPauseButton.className="hide";       //Hides play/pause button
+    stopButton.className="hide";            //Hides stop button
+    totalSecs = 0;                          //Resets totalSecs variable
+}//end of function stopTimer()
+
+//===============================================================================================================================
+//Function displayTotalSeconds() displays all seconds spent working in HTML. Called when work session is stopped or ends.
+//This code needs to be adapted to send the numbers to the database instead of putting in HTML.
+//===============================================================================================================================
+function displayTotalSeconds(){
+    var prevSecs = parseInt(totalSecondRecord.innerHTML);       //Gets contents of html, converts to integer, sets as variable
+    var newTotal = totalSecs + prevSecs;                        //Adds the total seconds of this session to total number stored in html
+    totalSecondRecord.innerHTML= newTotal;                      //Updates html to contain new total
+}//end of function displayTotalSeconds
 
 //===============================================================================================================================
 //Function endWorkSession() called when work timer runs down.
 //===============================================================================================================================
 
 function endWorkSession(){
-    clearInterval(timerVar);
-    totalSecs = totalSecs + secsElapsed;
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    //Add code to push totalSecs to database here
-    document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
-    totalSecs = 0;
-    playBreakTimer();
-    playTone();
-}
+    clearInterval(timerVar);                                        //Stops timer
+    totalSecs = totalSecs + secsElapsed;                            //the last seconds elapsed are added onto total seconds
+    displayTotalSeconds();                                          //Adds new total seconds to total stored in HTML
+    sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";  //Updates html to show total for that session
+    totalSecs = 0;                                                  //resets total seconds
+    playBreakTimer();                                               //Plays break timer
+    playTone();                                                     //Plays tone
+}//end of function endWorkSession()
 
 //===============================================================================================================================
 //Function playBreakTimer starts the myTimer. It's called when play or resume is pressed.
 //===============================================================================================================================
 
 function playBreakTimer(){
-    start = new Date().getTime();                                           //Return the number of milliseconds since midnight 1970/01/01
+    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(breakSecsLeft, breakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    document.getElementById("clock").className="break";
-    document.getElementById("skipBreak").className="show";
-    document.getElementById("playPause").className="hide";
-    document.getElementById("stop").className="hide";
-}
+    wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
+    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
+}//end of function playBreakTimer()
 
 //===============================================================================================================================
 //Function endBreakSession runs when break session is finished. It starts work session, and hides "Skip Break" button
 //===============================================================================================================================
 
 function endBreakSession(){
-    secsElapsed = 0;
-    clearInterval(timerVar);
-    document.getElementById("skipBreak").className="hide";
-    document.getElementById("stop").className="show";
-    document.getElementById("playPause").className="show";
-    workSecsLeft = 10;
-    workMinsLeft = workSecsLeft/60;
-    playWorkTimer();
-    playTone();
-}
+    secsElapsed = 0;                                //Resets seconds elapsed
+    clearInterval(timerVar);                        //Stops timer
+    workSecsLeft = 10;                              //Resets work seconds left to original amount
+    workMinsLeft = workSecsLeft/60;                 //Resets work mins left to original amount
+    workButtons();                                  //Hides skip break, shows play/pause & stop buttons
+    playWorkTimer();                                //Starts work timer
+    playTone();                                     //Plays tone
+}//end of function endBreakSession()
 
 //===============================================================================================================================
 //Function skipBreak runs 'SkipBreak' button pressed. It starts work session, and hides "Skip Break" button
 //===============================================================================================================================
 
 function skipBreak(){
-    workSecsLeft = 10;
-    workMinsLeft = workSecsLeft/60;
-    secsElapsed = 0;
-    document.getElementById("skipBreak").className="hide";
-    document.getElementById("stop").className="show";
-    document.getElementById("playPause").className="show";
-    clearInterval(timerVar);
-    playWorkTimer();
-}
-
-
-//the last number that you pause on during a work session, is the number of seconds you get in the next work session.
-//The number that it thinks it should resume at, it resumes at next time too.
-//If I pause the work at five seconds, then resume again until end, the next work session after the break is only five seconds long.
+    workSecsLeft = 10;                              //Resets work seconds left to original amount
+    workMinsLeft = workSecsLeft/60;                 //Resets work mins left to original amount
+    secsElapsed = 0;                                //Resets seconds elapsed
+    workButtons();                                  //Hides skip break, shows play/pause & stop buttons
+    clearInterval(timerVar);                        //Stops break timer
+    playWorkTimer();                                //Plays work timer
+}//end of function skipBreak()
 
 //===============================================================================================================================
 //Function playTone runs when work session ends and when break session ends
@@ -184,4 +187,20 @@ function skipBreak(){
 
 function playTone(){
     tone.play();
+}//end of function playTone
+
+//===============================================================================================================================
+//Functions to display correct buttons.
+//===============================================================================================================================
+
+function breakButtons(){
+    skipBreakButton.className="show";
+    playPauseButton.className="hide";
+    stopButton.className="hide";
+}
+
+function workButtons(){
+    skipBreakButton.className="hide";
+    stopButton.className="show";
+    playPauseButton.className="show";
 }
