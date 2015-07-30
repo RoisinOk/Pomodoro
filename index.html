@@ -6,9 +6,18 @@
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
+    <br>
+    <form>
+          Work Session Length:
+          <input type="number" id="workLengthInput">
+      <br>
+          Break Session Length:
+          <input type="number" id="breakLengthInput">
+          <input type="button" onclick="getTimeSettings()" value="Submit">
+    </form>
+    <br>
     <h1 id="clock" class="none"><span id =minsDiv>00</span>:<span id =secsDiv>00</span></h1>
     <br>
-
     <br>
     <button onclick="playPause()" id="playPause">  Start Work  </button>
     <button onclick="stopTimer()" id="stop">  Stop Working  </button>
@@ -16,6 +25,10 @@
 
     <p id="timeRecord"></p>
     <p id="totalSecondRecord">0</p>
+    <br>
+
+    <br>
+
     <audio id="tone">
       <source src="aTone.mp3" type="audio/mpeg">
       Your browser does not support the audio element.

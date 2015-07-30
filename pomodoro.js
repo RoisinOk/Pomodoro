@@ -10,12 +10,12 @@ var minsElapsed;                        //Declare variable for elapsed mins
 var totalSecs       = 0;                //Declare variable to hold total amount of seconds. It is added to as seconds elapse, and
                                         //retained through pause and play.
 
-var workSecsLeft    = 10;               //sets amount of seconds in work session. Counts down from this number.
-var workMinsLeft    = workSecsLeft/60;  //Amount of minutes in workSecsLeft
+var workSecsLeft;                       //sets amount of seconds in work session. Counts down from this number.
+var workMinsLeft;                       //Amount of minutes in workSecsLeft
 var workPlaying     = false;            //Boolean. False = timer paused. True = timer running
 
-var breakSecsLeft   = 5;                //sets amount of seconds in break session. Counts down from this number.
-var breakMinsLeft   = breakSecsLeft/60; //Amount of minutes in breakSecsLeft
+var breakSecsLeft;                      //sets amount of seconds in break session. Counts down from this number.
+var breakMinsLeft;                      //Amount of minutes in breakSecsLeft
 
 
 //Variables for accessing HTML elements
@@ -28,6 +28,18 @@ var playPauseButton     = document.getElementById("playPause");
 var stopButton          = document.getElementById("stop");
 var skipBreakButton     = document.getElementById("skipBreak");
 var sessRecord          = document.getElementById("timeRecord")
+
+//===============================================================================================================================
+//Function  getTimeSettings() Gets user input from input form (on submit).
+// This code needs to be replaced by code to get settings from database.
+//===============================================================================================================================
+
+function getTimeSettings(){
+    workSecsLeft    = document.getElementById("workLengthInput").value;
+    workMinsLeft    = workSecsLeft/60;
+    breakSecsLeft   = document.getElementById("breakLengthInput").value;
+    breakMinsLeft   = breakSecsLeft/60;
+}
 
 //===============================================================================================================================
 //Function myTimer - Timer counts down minutes and seconds of session, and calls function to end session at end.
@@ -159,10 +171,9 @@ function playBreakTimer(){
 //===============================================================================================================================
 
 function endBreakSession(){
+    getTimeSettings();                              //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     clearInterval(timerVar);                        //Stops timer
-    workSecsLeft = 10;                              //Resets work seconds left to original amount
-    workMinsLeft = workSecsLeft/60;                 //Resets work mins left to original amount
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
     playWorkTimer();                                //Starts work timer
     playTone();                                     //Plays tone
@@ -173,8 +184,7 @@ function endBreakSession(){
 //===============================================================================================================================
 
 function skipBreak(){
-    workSecsLeft = 10;                              //Resets work seconds left to original amount
-    workMinsLeft = workSecsLeft/60;                 //Resets work mins left to original amount
+    getTimeSettings();                              //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
     clearInterval(timerVar);                        //Stops break timer
