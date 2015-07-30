@@ -2,6 +2,9 @@
  * Created by roisinokeeffe on 27/07/2015.
  */
 
+var userWorkLength;
+var userBreakLength;
+
 var timerVar;                           //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
 var secsElapsed;                        //Declare variable for elapsed secs
@@ -34,12 +37,38 @@ var sessRecord          = document.getElementById("timeRecord")
 // This code needs to be replaced by code to get settings from database.
 //===============================================================================================================================
 
-function getTimeSettings(){
-    workSecsLeft    = document.getElementById("workLengthInput").value;
+function resetTimeSettings(){
+    workSecsLeft    = userWorkLength;;
     workMinsLeft    = workSecsLeft/60;
-    breakSecsLeft   = document.getElementById("breakLengthInput").value;
+    breakSecsLeft   = userBreakLength;
     breakMinsLeft   = breakSecsLeft/60;
 }
+
+//===============================================================================================================================
+//FIREBASE STUFF
+//===============================================================================================================================
+var FIREBASE_ROOT = "https://studybuddyapp.firebaseio.com";
+
+function getActiveUser() {
+    // TODO: implement authentication
+    return "-JsqE8CQ9Dg7LE0OKQ2P"
+}
+
+//Although the time is stored in the database as minutes, they are used as seconds here for quick testing
+var userStudyMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/study_session_minutes');
+var userBreakMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/short_break_minutes');
+
+userStudyMins.on("value", function(snapshot) {
+    workSecsLeft    = snapshot.val();
+    workMinsLeft    = workSecsLeft/60;
+    userWorkLength  = snapshot.val();
+});
+
+userBreakMins.on("value", function(snapshot) {
+    breakSecsLeft=snapshot.val();
+    breakMinsLeft   = breakSecsLeft/60;
+    userBreakLength  = snapshot.val();
+});
 
 //===============================================================================================================================
 //Function myTimer - Timer counts down minutes and seconds of session, and calls function to end session at end.
@@ -171,7 +200,7 @@ function playBreakTimer(){
 //===============================================================================================================================
 
 function endBreakSession(){
-    getTimeSettings();                              //Resets time settings left to original amount
+    resetTimeSettings();                              //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     clearInterval(timerVar);                        //Stops timer
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
@@ -184,7 +213,7 @@ function endBreakSession(){
 //===============================================================================================================================
 
 function skipBreak(){
-    getTimeSettings();                              //Resets time settings left to original amount
+    resetTimeSettings();                              //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
     clearInterval(timerVar);                        //Stops break timer
@@ -214,3 +243,4 @@ function workButtons(){
     stopButton.className="show";
     playPauseButton.className="show";
 }
+

@@ -4,17 +4,10 @@
   <meta charset="UTF-8">
   <title>Pomodoro</title>
   <link rel="stylesheet" type="text/css" href="main.css">
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 </head>
 <body>
     <br>
-    <form>
-          Work Session Length:
-          <input type="number" id="workLengthInput">
-      <br>
-          Break Session Length:
-          <input type="number" id="breakLengthInput">
-          <input type="button" onclick="getTimeSettings()" value="Submit">
-    </form>
     <br>
     <h1 id="clock" class="none"><span id =minsDiv>00</span>:<span id =secsDiv>00</span></h1>
     <br>
