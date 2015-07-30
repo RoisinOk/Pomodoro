@@ -2,8 +2,6 @@
  * Created by roisinokeeffe on 27/07/2015.
  */
 
-
-
 var timerVar;                       //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
 var secsElapsed;                        //Declare variable for elapsed secs
@@ -12,12 +10,14 @@ var minsElapsed;                        //Declare variable for elapsed mins
 var totalSecs = 0;                      //Declare variable to hold total amount of seconds. It is added to as seconds elapse, and
                                         //retained through pause and play. Only
 
-var workSecsLeft = 1500;                     //sets seconds to 60. Counts down from this number.
+var workSecsLeft = 10;                     //sets seconds to 60. Counts down from this number.
 var workMinsLeft = workSecsLeft/60;        //Amount of minutes in workSecsLeft
 var workPlaying = false;                   //Boolean. False = timer paused. True = timer running
 
-var breakSecsLeft = 300;
+var breakSecsLeft = 5;
 var breakMinsLeft = breakSecsLeft/60;
+
+var tone = document.getElementById("tone");
 
 //===============================================================================================================================
 //Function myTimer - Timer counts down minutes and seconds of session, and calls function to end session at end.
@@ -100,10 +100,12 @@ function stopTimer(){                                                           
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if(workPlaying){                                //if the timer had been workPlaying when button pressed,
         totalSecs = totalSecs + secsElapsed;    //the last seconds elapsed need to be added onto total seconds
-        alert("You studied for "+totalSecs+" seconds.");
+        //alert("You studied for "+totalSecs+" seconds.");
+        document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
         //Add code to push totalSecs to database here
     } else {                                    //if the player had been paused, the seconds would have already been added on.
-        alert("You studied for "+totalSecs+" seconds.");
+        //alert("You studied for "+totalSecs+" seconds.");
+        document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
         //Add code to push totalSecs to database here
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,9 +123,10 @@ function endWorkSession(){
     totalSecs = totalSecs + secsElapsed;
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //Add code to push totalSecs to database here
-    alert("You studied for "+totalSecs+" seconds.");
+    document.getElementById("timeRecord").innerHTML="You studied for "+totalSecs+" seconds.";
     totalSecs = 0;
     playBreakTimer();
+    playTone();
 }
 
 //===============================================================================================================================
@@ -152,7 +155,7 @@ function endBreakSession(){
     workSecsLeft = 10;
     workMinsLeft = workSecsLeft/60;
     playWorkTimer();
-
+    playTone();
 }
 
 //===============================================================================================================================
@@ -160,7 +163,7 @@ function endBreakSession(){
 //===============================================================================================================================
 
 function skipBreak(){
-    workSecsLeft = 1500;
+    workSecsLeft = 10;
     workMinsLeft = workSecsLeft/60;
     secsElapsed = 0;
     document.getElementById("skipBreak").className="hide";
@@ -175,3 +178,10 @@ function skipBreak(){
 //The number that it thinks it should resume at, it resumes at next time too.
 //If I pause the work at five seconds, then resume again until end, the next work session after the break is only five seconds long.
 
+//===============================================================================================================================
+//Function playTone runs when work session ends and when break session ends
+//===============================================================================================================================
+
+function playTone(){
+    tone.play();
+}
