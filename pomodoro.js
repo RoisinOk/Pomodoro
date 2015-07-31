@@ -3,7 +3,8 @@
  */
 
 var userWorkLength;
-var userBreakLength;
+var userShortBreakLength;
+var userLongBreakLength;
 
 var timerVar;                           //Needs global variable so clearInterval can reference it
 var start;                              //Declare variable for start time
@@ -17,8 +18,11 @@ var workSecsLeft;                       //sets amount of seconds in work session
 var workMinsLeft;                       //Amount of minutes in workSecsLeft
 var workPlaying     = false;            //Boolean. False = timer paused. True = timer running
 
-var breakSecsLeft;                      //sets amount of seconds in break session. Counts down from this number.
-var breakMinsLeft;                      //Amount of minutes in breakSecsLeft
+var shortBreakSecsLeft;                      //sets amount of seconds in break session. Counts down from this number.
+var shortBreakMinsLeft;                      //Amount of minutes in breakSecsLeft
+
+var longBreakSecsLeft;
+var longBreakMinsLeft;
 
 
 //Variables for accessing HTML elements
@@ -40,8 +44,8 @@ var sessRecord          = document.getElementById("timeRecord")
 function resetTimeSettings(){
     workSecsLeft    = userWorkLength;;
     workMinsLeft    = workSecsLeft/60;
-    breakSecsLeft   = userBreakLength;
-    breakMinsLeft   = breakSecsLeft/60;
+    shortBreakSecsLeft   = userShortBreakLength;
+    shortBreakMinsLeft   = shortBreakSecsLeft/60;
 }
 
 //===============================================================================================================================
@@ -49,6 +53,8 @@ function resetTimeSettings(){
 //===============================================================================================================================
 var FIREBASE_ROOT = "https://studybuddyapp.firebaseio.com";
 
+//This function will get the current active user and return their user id.
+//Currently hardoded to return Alice's user ID (for development)
 function getActiveUser() {
     // TODO: implement authentication
     return "-JsqE8CQ9Dg7LE0OKQ2P"
@@ -56,19 +62,39 @@ function getActiveUser() {
 
 //Although the time is stored in the database as minutes, they are used as seconds here for quick testing
 var userStudyMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/study_session_minutes');
-var userBreakMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/short_break_minutes');
+var userShortBreakMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/short_break_minutes');
+var userLongBreakMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActiveUser() + '/long_break_minutes');
 
+//Getting user settings for length of work session from database. (Update automatically on change).
 userStudyMins.on("value", function(snapshot) {
-    workSecsLeft    = snapshot.val();
+    workSecsLeft    = snapshot.val();           //Sets workSecsLeft to value stored in database
     workMinsLeft    = workSecsLeft/60;
-    userWorkLength  = snapshot.val();
+    userWorkLength  = snapshot.val();           //Sets global variable userWorkLength as value in database
 });
 
-userBreakMins.on("value", function(snapshot) {
-    breakSecsLeft=snapshot.val();
-    breakMinsLeft   = breakSecsLeft/60;
-    userBreakLength  = snapshot.val();
+//Getting user settings for length of short break session from database. (Update automatically on change)
+userShortBreakMins.on("value", function(snapshot) {
+    shortBreakSecsLeft=snapshot.val();               //Sets breakSecsLeft to value stored in database
+    shortBreakMinsLeft   = shortBreakSecsLeft/60;
+    userShortBreakLength  = snapshot.val();          //Sets global variable userBreakLength as value in database
 });
+
+//Getting user settings for length of long break session from database. (Update automatically on change)
+userLongBreakMins.on("value", function(snapshot){
+    longBreakSecsLeft = snapshot.val();
+    longBreakMinsLeft = longBreakSecsLeft/60;
+    userLongBreakLength = snapshot.val();
+});
+
+// Sets work session and short and long break lengths in database. Called when submit is pressed on form.
+function saveToDatabase(){
+    var workInput = document.getElementById("workInput").value;
+    var shortBreakInput = document.getElementById("shortBreakInput").value;
+    var longBreakInput = document.getElementById("longBreakInput").value;
+    userStudyMins.set(workInput);
+    userShortBreakMins.set(shortBreakInput);
+    userLongBreakMins.set(longBreakInput);
+}// end of function saveToDatabase()
 
 //===============================================================================================================================
 //Function myTimer - Timer counts down minutes and seconds of session, and calls function to end session at end.
@@ -190,7 +216,7 @@ function endWorkSession(){
 
 function playBreakTimer(){
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
-    timerVar = window.setInterval(function(){ myTimer(breakSecsLeft, breakMinsLeft, endBreakSession) }, 100);    //Runs timer
+    timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
     wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
     breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
 }//end of function playBreakTimer()

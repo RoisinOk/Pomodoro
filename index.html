@@ -15,12 +15,21 @@
     <button onclick="playPause()" id="playPause">  Start Work  </button>
     <button onclick="stopTimer()" id="stop">  Stop Working  </button>
     <button onclick="skipBreak()" class="hide" id="skipBreak">Skip Break</button>
-
+    <br>
+    <br>
     <p id="timeRecord"></p>
     <p id="totalSecondRecord">0</p>
     <br>
-
     <br>
+    <form>
+        Work Session Length:
+        <input id="workInput" type="number"><br><br>
+        Short Break Length:
+        <input id="shortBreakInput" type="number"><br><br>
+        Long Break Length:
+        <input id="longBreakInput" type="number"><br><br>
+        <button type="submit" onclick="saveToDatabase();">Save Changes</button>
+    </form>
 
     <audio id="tone">
       <source src="aTone.mp3" type="audio/mpeg">
