@@ -18,11 +18,13 @@ var workSecsLeft;                       //sets amount of seconds in work session
 var workMinsLeft;                       //Amount of minutes in workSecsLeft
 var workPlaying     = false;            //Boolean. False = timer paused. True = timer running
 
-var shortBreakSecsLeft;                      //sets amount of seconds in break session. Counts down from this number.
-var shortBreakMinsLeft;                      //Amount of minutes in breakSecsLeft
+var shortBreakSecsLeft;                 //sets amount of seconds in break session. Counts down from this number.
+var shortBreakMinsLeft;                 //Amount of minutes in breakSecsLeft
 
 var longBreakSecsLeft;
 var longBreakMinsLeft;
+
+var workSessionCount = 0;
 
 
 //Variables for accessing HTML elements
@@ -205,8 +207,14 @@ function endWorkSession(){
     totalSecs = totalSecs + secsElapsed;                            //the last seconds elapsed are added onto total seconds
     displayTotalSeconds();                                          //Adds new total seconds to total stored in HTML
     sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";  //Updates html to show total for that session
-    totalSecs = 0;                                                  //resets total seconds
-    playBreakTimer();                                               //Plays break timer
+    totalSecs = 0;
+    if(workSessionCount == 3){
+        playLongBreakTimer();
+        workSessionCount = 0;
+    }else{
+        playShortBreakTimer();
+        workSessionCount++;
+    }                                                               //resets total seconds
     playTone();                                                     //Plays tone
 }//end of function endWorkSession()
 
@@ -214,7 +222,7 @@ function endWorkSession(){
 //Function playBreakTimer starts the myTimer. It's called when play or resume is pressed.
 //===============================================================================================================================
 
-function playBreakTimer(){
+function playShortBreakTimer(){
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
     wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
@@ -222,11 +230,23 @@ function playBreakTimer(){
 }//end of function playBreakTimer()
 
 //===============================================================================================================================
+//Function playLongBreakTimer starts the myTimer. It's called when play or resume is pressed.
+//===============================================================================================================================
+
+function playLongBreakTimer(){
+    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
+    timerVar = window.setInterval(function(){ myTimer(longBreakSecsLeft, longBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
+    wholeClock.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
+    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
+}//end of function playBreakTimer()
+
+
+//===============================================================================================================================
 //Function endBreakSession runs when break session is finished. It starts work session, and hides "Skip Break" button
 //===============================================================================================================================
 
 function endBreakSession(){
-    resetTimeSettings();                              //Resets time settings left to original amount
+    resetTimeSettings();                            //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     clearInterval(timerVar);                        //Stops timer
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
@@ -239,7 +259,7 @@ function endBreakSession(){
 //===============================================================================================================================
 
 function skipBreak(){
-    resetTimeSettings();                              //Resets time settings left to original amount
+    resetTimeSettings();                            //Resets time settings left to original amount
     secsElapsed = 0;                                //Resets seconds elapsed
     workButtons();                                  //Hides skip break, shows play/pause & stop buttons
     clearInterval(timerVar);                        //Stops break timer
