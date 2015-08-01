@@ -70,32 +70,32 @@ var userLongBreakMins = new Firebase(FIREBASE_ROOT +'/Users/active/' + getActive
 //Getting user settings for length of work session from database. (Update automatically on change).
 userStudyMins.on("value", function(snapshot) {
     workSecsLeft    = snapshot.val();           //Sets workSecsLeft to value stored in database
-    workMinsLeft    = workSecsLeft/60;
+    workMinsLeft    = workSecsLeft/60;          //Calculates minutes left
     userWorkLength  = snapshot.val();           //Sets global variable userWorkLength as value in database
 });
 
 //Getting user settings for length of short break session from database. (Update automatically on change)
 userShortBreakMins.on("value", function(snapshot) {
-    shortBreakSecsLeft=snapshot.val();               //Sets breakSecsLeft to value stored in database
-    shortBreakMinsLeft   = shortBreakSecsLeft/60;
-    userShortBreakLength  = snapshot.val();          //Sets global variable userBreakLength as value in database
+    shortBreakSecsLeft=snapshot.val();                  //Sets breakSecsLeft to value stored in database
+    shortBreakMinsLeft   = shortBreakSecsLeft/60;       //Calculates minutes left
+    userShortBreakLength  = snapshot.val();             //Sets global variable userBreakLength as value in database
 });
 
 //Getting user settings for length of long break session from database. (Update automatically on change)
 userLongBreakMins.on("value", function(snapshot){
-    longBreakSecsLeft = snapshot.val();
-    longBreakMinsLeft = longBreakSecsLeft/60;
-    userLongBreakLength = snapshot.val();
+    longBreakSecsLeft = snapshot.val();                 //Sets longBreakSecsLeft to value stored in database
+    longBreakMinsLeft = longBreakSecsLeft/60;           //Calculates minutes left
+    userLongBreakLength = snapshot.val();               //Sets global variable userLongBreakLength as value in database
 });
 
 // Sets work session and short and long break lengths in database. Called when submit is pressed on form.
 function saveToDatabase(){
-    var workInput = document.getElementById("workInput").value;
-    var shortBreakInput = document.getElementById("shortBreakInput").value;
-    var longBreakInput = document.getElementById("longBreakInput").value;
-    userStudyMins.set(workInput);
-    userShortBreakMins.set(shortBreakInput);
-    userLongBreakMins.set(longBreakInput);
+    var workInput = document.getElementById("workInput").value;                     //Gets value entered on form
+    var shortBreakInput = document.getElementById("shortBreakInput").value;         //Gets value entered on form
+    var longBreakInput = document.getElementById("longBreakInput").value;           //Gets value entered on form
+    userStudyMins.set(workInput);                                               //Puts into database
+    userShortBreakMins.set(shortBreakInput);                                    //Puts into database
+    userLongBreakMins.set(longBreakInput);                                      //Puts into database
 }// end of function saveToDatabase()
 
 //===============================================================================================================================
@@ -142,6 +142,29 @@ function playWorkTimer(){
 
 
 //===============================================================================================================================
+//Function playShortBreakTimer starts the myTimer. It's called when play or resume is pressed.
+//===============================================================================================================================
+
+function playShortBreakTimer(){
+    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
+    timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
+    wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
+    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
+}//end of function playBreakTimer()
+
+//===============================================================================================================================
+//Function playLongBreakTimer starts the myTimer. It's called when play or resume is pressed.
+//===============================================================================================================================
+
+function playLongBreakTimer(){
+    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
+    timerVar = window.setInterval(function(){ myTimer(longBreakSecsLeft, longBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
+    wholeClock.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
+    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
+}//end of function playBreakTimer()
+
+
+//===============================================================================================================================
 //Function pauses timer. Called when pause is pressed.
 //===============================================================================================================================
 function pauseTimer(){
@@ -176,10 +199,10 @@ function stopTimer(){
 
     if(workPlaying){                                    //if the timer had been workPlaying when button pressed,
         totalSecs = totalSecs + secsElapsed;            //the last seconds elapsed need to be added onto total seconds
-        sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";
+        sessRecord.innerHTML="You worked for "+totalSecs+" seconds in total.";
         displayTotalSeconds();
     } else {                                            //if the player had been paused, the seconds would have already been added on.
-        sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";
+        sessRecord.innerHTML="You worked for "+totalSecs+" seconds in total.";
         displayTotalSeconds();
     }
 
@@ -206,39 +229,18 @@ function endWorkSession(){
     clearInterval(timerVar);                                        //Stops timer
     totalSecs = totalSecs + secsElapsed;                            //the last seconds elapsed are added onto total seconds
     displayTotalSeconds();                                          //Adds new total seconds to total stored in HTML
-    sessRecord.innerHTML="You studied for "+totalSecs+" seconds.";  //Updates html to show total for that session
-    totalSecs = 0;
-    if(workSessionCount == 3){
-        playLongBreakTimer();
-        workSessionCount = 0;
+    sessRecord.innerHTML="You worked for "+totalSecs+" seconds this session.";  //Updates html to show total for that session
+    totalSecs = 0;                                                  //Resets total seconds
+    if(workSessionCount == 3){                                      //If workSessionCount is 3, there have been four work sessions (only updates at end of session)
+        playLongBreakTimer();                                       //Start a long break
+        workSessionCount = 0;                                       //Resets workSessionCount
     }else{
-        playShortBreakTimer();
-        workSessionCount++;
-    }                                                               //resets total seconds
+        playShortBreakTimer();                                      //Start short break
+        workSessionCount++;                                         //Increases work sessionCount by one
+    }
     playTone();                                                     //Plays tone
 }//end of function endWorkSession()
 
-//===============================================================================================================================
-//Function playBreakTimer starts the myTimer. It's called when play or resume is pressed.
-//===============================================================================================================================
-
-function playShortBreakTimer(){
-    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
-    timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
-    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
-}//end of function playBreakTimer()
-
-//===============================================================================================================================
-//Function playLongBreakTimer starts the myTimer. It's called when play or resume is pressed.
-//===============================================================================================================================
-
-function playLongBreakTimer(){
-    start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
-    timerVar = window.setInterval(function(){ myTimer(longBreakSecsLeft, longBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    wholeClock.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
-    breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
-}//end of function playBreakTimer()
 
 
 //===============================================================================================================================
