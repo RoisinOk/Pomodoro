@@ -39,6 +39,9 @@ var skipBreakButton     = document.getElementById("skipBreak");
 var sessRecord          = document.getElementById("timeRecord")
 var circleDiv           = document.getElementById("circleDiv")
 
+var tl = new TimelineMax();
+
+
 //===============================================================================================================================
 //Function  getTimeSettings() Gets user input from input form (on submit).
 // This code needs to be replaced by code to get settings from database.
@@ -134,11 +137,13 @@ function myTimer(secsLeft, minsLeft, endSessionFunction){
 //===============================================================================================================================
 
 function playWorkTimer(){
+    runWorkAnimation();
     secsElapsed=0;                                          //Resets seconds elapsed variable to zero before it starts
     start = new Date().getTime();                           //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(workSecsLeft, workMinsLeft, endWorkSession) }, 100);    //Runs timer
     workPlaying = true;                                     //Sets workPlaying boolean to true
-    circleDiv.className="working";                         //Gives clock class of working (Changes colour to red)
+
+    //circleDiv.className="working";                         //Gives clock class of working (Changes colour to red)
 }//end of function playWorkTimer()
 
 
@@ -147,9 +152,10 @@ function playWorkTimer(){
 //===============================================================================================================================
 
 function playShortBreakTimer(){
+    runShortBreakAnimation();
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    circleDiv.className="break";                   //Gives clock class of break (Changes colour to blue)
+    //circleDiv.className="break";                   //Gives clock class of break (Changes colour to blue)
     breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
 }//end of function playBreakTimer()
 
@@ -158,9 +164,10 @@ function playShortBreakTimer(){
 //===============================================================================================================================
 
 function playLongBreakTimer(){
+    runLongBreakAnimation()
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(longBreakSecsLeft, longBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    circleDiv.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
+    //circleDiv.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
     breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
 }//end of function playBreakTimer()
 
@@ -174,7 +181,7 @@ function pauseTimer(){
     clearInterval(timerVar);                            //stops the timer from running
     totalSecs = totalSecs + secsElapsed;                //Updates the total seconds count global variable to add on seconds just elapsed
     workPlaying = false;                                //Changes workPlaying boolean to false
-    circleDiv.className="none";                        //Gives clock class of none (Changes colour to grey)
+    //circleDiv.className="none";                        //Gives clock class of none (Changes colour to grey)
 }//end of function pauseTimer()
 
 //===============================================================================================================================
@@ -185,6 +192,7 @@ function playPause(){                                       //Runs when play/pau
     if(workPlaying){                                        //If already Playing
         pauseTimer();                                       //Pause timer
         playPauseButton.innerHTML="  Play  ";               //Make play/pause button show play
+
     }else{                                                  //If not workPlaying
         playWorkTimer();                                    //Play the work timer
         playPauseButton.innerHTML="  Pause ";               //Make play/pause button show pause
@@ -232,7 +240,7 @@ function endWorkSession(){
     displayTotalSeconds();                                          //Adds new total seconds to total stored in HTML
     sessRecord.innerHTML="You worked for "+totalSecs+" seconds this session.";  //Updates html to show total for that session
     totalSecs = 0;                                                  //Resets total seconds
-    if(workSessionCount == 3){                                      //If workSessionCount is 3, there have been four work sessions (only updates at end of session)
+    if(workSessionCount == 3) {                                      //If workSessionCount is 3, there have been four work sessions (only updates at end of session)
         playLongBreakTimer();                                       //Start a long break
         workSessionCount = 0;                                       //Resets workSessionCount
     }else{
@@ -297,8 +305,19 @@ function workButtons(){
 //TIMELINE STUFF
 //===============================================================================================================================
 
+function runWorkAnimation(){
+    tl.add( TweenLite.to(circleDiv, workSecsLeft, {backgroundColor: '#66CCFF'}) );
+}
 
 
+function runShortBreakAnimation(){
+    tl.add( TweenLite.to(circleDiv, shortBreakSecsLeft, {backgroundColor: '#00CC66'}) );
+}
+
+
+function runLongBreakAnimation(){
+    tl.add( TweenLite.to(circleDiv, longBreakSecsLeft, {backgroundColor: '#00CC66'}) );
+}
 
 
 
