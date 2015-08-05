@@ -37,6 +37,7 @@ var playPauseButton     = document.getElementById("playPause");
 var stopButton          = document.getElementById("stop");
 var skipBreakButton     = document.getElementById("skipBreak");
 var sessRecord          = document.getElementById("timeRecord")
+var circleDiv           = document.getElementById("circleDiv")
 
 //===============================================================================================================================
 //Function  getTimeSettings() Gets user input from input form (on submit).
@@ -137,7 +138,7 @@ function playWorkTimer(){
     start = new Date().getTime();                           //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(workSecsLeft, workMinsLeft, endWorkSession) }, 100);    //Runs timer
     workPlaying = true;                                     //Sets workPlaying boolean to true
-    wholeClock.className="working";                         //Gives clock class of working (Changes colour to red)
+    circleDiv.className="working";                         //Gives clock class of working (Changes colour to red)
 }//end of function playWorkTimer()
 
 
@@ -148,7 +149,7 @@ function playWorkTimer(){
 function playShortBreakTimer(){
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(shortBreakSecsLeft, shortBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    wholeClock.className="break";                   //Gives clock class of break (Changes colour to blue)
+    circleDiv.className="break";                   //Gives clock class of break (Changes colour to blue)
     breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
 }//end of function playBreakTimer()
 
@@ -159,7 +160,7 @@ function playShortBreakTimer(){
 function playLongBreakTimer(){
     start = new Date().getTime();                   //Return the number of milliseconds since midnight 1970/01/01
     timerVar = window.setInterval(function(){ myTimer(longBreakSecsLeft, longBreakMinsLeft, endBreakSession) }, 100);    //Runs timer
-    wholeClock.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
+    circleDiv.className="longBreak";                   //Gives clock class of break (Changes colour to blue)
     breakButtons();                                 //Hides play/Pause & stop buttons, shows skip break
 }//end of function playBreakTimer()
 
@@ -173,7 +174,7 @@ function pauseTimer(){
     clearInterval(timerVar);                            //stops the timer from running
     totalSecs = totalSecs + secsElapsed;                //Updates the total seconds count global variable to add on seconds just elapsed
     workPlaying = false;                                //Changes workPlaying boolean to false
-    wholeClock.className="none";                        //Gives clock class of none (Changes colour to grey)
+    circleDiv.className="none";                        //Gives clock class of none (Changes colour to grey)
 }//end of function pauseTimer()
 
 //===============================================================================================================================
@@ -291,4 +292,22 @@ function workButtons(){
     stopButton.className="show";
     playPauseButton.className="show";
 }
+
+//===============================================================================================================================
+//TIMELINE STUFF
+//===============================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

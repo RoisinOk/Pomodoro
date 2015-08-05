@@ -8,27 +8,41 @@
 }
 
 .working{
-    color: crimson;
-    font-family: sans-serif;
-    font-size: 4em;
+    background-color: crimson;
 }
 
-
 .break{
-    color: darkturquoise;
-    font-family: sans-serif;
-    font-size: 4em;
+    background-color: darkturquoise;
 }
 
 .longBreak{
-    color: mediumpurple;
-    font-family: sans-serif;
-    font-size: 4em;
+    background-color: mediumpurple;
 }
 
 .none{
-    color: dimgray;
-    font-family: sans-serif;
-    font-size: 4em;
+    background-color: darkgray;
 }
 
+#circleDiv{
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    margin-top: 5%;
+
+}
+
+#clock{
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 4em;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
