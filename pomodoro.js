@@ -191,11 +191,11 @@ function pauseTimer(){
 function playPause(){                                       //Runs when play/pause button is pressed
     if(workPlaying){                                        //If already Playing
         pauseTimer();                                       //Pause timer
-        playPauseButton.innerHTML="  Play  ";               //Make play/pause button show play
+        playPauseButton.className ="fa fa-play fa-4x show";      //Make play/pause button show play
 
     }else{                                                  //If not workPlaying
         playWorkTimer();                                    //Play the work timer
-        playPauseButton.innerHTML="  Pause ";               //Make play/pause button show pause
+        playPauseButton.className ="fa fa-pause fa-4x show";               //Make play/pause button show pause
     }
 }//end of function playPause()
 
@@ -290,15 +290,15 @@ function playTone(){
 //===============================================================================================================================
 
 function breakButtons(){
-    skipBreakButton.className="show";
-    playPauseButton.className="hide";
-    stopButton.className="hide";
+    skipBreakButton.className="skipBreak";
+    playPauseButton.className=" hide";
+    stopButton.className=" hide";
 }
 
 function workButtons(){
     skipBreakButton.className="hide";
-    stopButton.className="show";
-    playPauseButton.className="show";
+    stopButton.className="fa fa-stop fa-4x";
+    playPauseButton.className="fa fa-pause fa-4x";
 }
 
 //===============================================================================================================================

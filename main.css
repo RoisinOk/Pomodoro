@@ -1,26 +1,18 @@
+.fa-play{
+    float: left;
+    color: #00CC66;
+}
+.fa-pause{
+    float: left;
+    color: #66CCFF;
+}
+.fa-stop{
+    float: right;
+    color: #66CCFF;
+}
 
 .hide {
-    display: none;
-}
-
-.show {
-    display: block;
-}
-
-.working{
-    background-color: crimson;
-}
-
-.break{
-    background-color: darkturquoise;
-}
-
-.longBreak{
-    background-color: mediumpurple;
-}
-
-.none{
-    background-color: darkgray;
+    opacity: 0;
 }
 
 #circleDiv{
@@ -45,4 +37,25 @@
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+}
+
+#controls{
+    z-index: -40;
+    width: 12%;
+    margin: auto;
+    margin-top: 2%;
+}
+
+.skipBreak{
+    z-index: -30;
+    width: 12%;
+    margin: auto;
+    padding: 10px;
+    background-color: white;
+    border: solid;
+    border-color: #00CC66;
+    color: #00CC66;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.2em;
+    text-align: center;
 }

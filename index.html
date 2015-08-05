@@ -6,16 +6,20 @@
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
   <link href='http://fonts.googleapis.com/css?family=Exo+2:400,300,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="font-awesome-4.4.0/css/font-awesome.min.css">
 </head>
 <body>
 
     <div id="circleDiv">
         <h1 id="clock"><span id =minsDiv>00</span>:<span id =secsDiv>00</span></h1>
     </div>
+    <div id="controls">
+        <i class="fa fa-play fa-4x" onclick="playPause()" id="playPause"></i>
+        <i class="fa fa-stop fa-4x" onclick="stopTimer()" id="stop"></i>
+    </div>
+    <div onclick="skipBreak()" class="hide" id="skipBreak">Skip Break</div>
 
-    <button onclick="playPause()" id="playPause">  Start Work  </button>
-    <button onclick="stopTimer()" id="stop">  Stop Working  </button>
-    <button onclick="skipBreak()" class="hide" id="skipBreak">Skip Break</button>
+    <br>
 
     <p id="timeRecord"></p>
     <p>You worked for <span id="totalSecondRecord">0</span> seconds in total.</p>
